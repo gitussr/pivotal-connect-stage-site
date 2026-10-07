@@ -1,0 +1,212 @@
+<?php 
+/*
+*Template Name: Forms Page
+*/
+?>
+<?php get_header(); ?>
+
+	 
+
+        <?php include 'inner-banners.php' ?>
+
+        <section class="donations-four section-space all-form-page">
+            <div class="donations-four__bg" style="background-image: url(assets/images/donations/donation-bg-4-1.jpg);"></div><!-- /.donations-four__bg -->
+            <div class="container">
+                <div class="sec-title sec-title--two sec-title--center">
+                    <h3 class="sec-title__title">Our All <span class="sec-title__title__inner">Form Link</span></h3>
+                </div>
+                <div class="row gutter-y-30">
+					
+					  <div class="col-lg-4 col-md-6 wow fadeInUp animated d-none" data-wow-duration="1500ms" data-wow-delay="00ms" style="visibility: visible; animation-duration: 1500ms; animation-delay: 0ms; animation-name: fadeInUp;">
+                        <div class="donation-card-four">
+                            <a href="<?php echo get_home_url() ?>/referral-form/" class="donation-card-four__image" target="_blank">
+                                <img src="<?php echo get_home_url() ?>/wp-content/uploads/2026/05/Community-access-support-scaled.webp" alt="">
+                            </a>
+                            <div class="donation-card-four__content">
+                                <div class="donation-card-four__show">
+                                    <h3 class="donation-card-four__title"><a href="<?php echo get_home_url() ?>/referral-form/" target="_blank">Referral Form</a></h3>
+                                    <a href="<?php echo get_home_url() ?>/referral-form/" class="donation-card-four__btn cleenhearts-btn-two" target="_blank">Click Here To view Form</a>
+                                </div>
+                                <div class="donation-card-four__hover">
+                                    <h3 class="donation-card-four__title"><a href="<?php echo get_home_url() ?>/referral-form/" target="_blank">Referral Form</a></h3>
+                                    <a href="<?php echo get_home_url() ?>/referral-form/" class="donation-card-four__btn cleenhearts-btn-two" target="_blank">Click Here To view Form</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+					
+								  <div class="col-lg-4 col-md-6 wow fadeInUp animated d-none" data-wow-duration="1500ms" data-wow-delay="00ms" style="visibility: visible; animation-duration: 1500ms; animation-delay: 0ms; animation-name: fadeInUp;">
+                        <div class="donation-card-four">
+                            <a href="<?php echo get_home_url() ?>/privacy-consent-form" class="donation-card-four__image" target="_blank">
+                                <img src="<?php echo get_home_url() ?>/wp-content/uploads/2026/05/CALD-community-support-scaled.webp" alt="">
+                            </a>
+                            <div class="donation-card-four__content">
+                                <div class="donation-card-four__show">
+                                    <h3 class="donation-card-four__title"><a href="<?php echo get_home_url() ?>/privacy-consent-form" target="_blank">Privacy Consent Form</a></h3>
+                                    <a href="<?php echo get_home_url() ?>/privacy-consent-form" class="donation-card-four__btn cleenhearts-btn-two" target="_blank">Click Here To view Form</a>
+                                </div>
+                                <div class="donation-card-four__hover">
+                                    <h3 class="donation-card-four__title"><a href="<?php echo get_home_url() ?>/privacy-consent-form" target="_blank">Privacy Consent Form</a></h3>
+                                    <a href="<?php echo get_home_url() ?>/privacy-consent-form" class="donation-card-four__btn cleenhearts-btn-two" target="_blank">Click Here To view Form</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+					
+										  <div class="col-lg-4 col-md-6 wow fadeInUp animated d-none" data-wow-duration="1500ms" data-wow-delay="00ms" style="visibility: visible; animation-duration: 1500ms; animation-delay: 0ms; animation-name: fadeInUp;">
+                        <div class="donation-card-four">
+                            <a href="<?php echo get_home_url() ?>/participant-intake-form/" class="donation-card-four__image" target="_blank">
+                                <img src="<?php echo get_home_url() ?>/wp-content/uploads/2024/10/services-WhatsApp-Image-2024-10-21-at-18.07.42_9f6ebf2e.jpg" alt="">
+                            </a>
+                            <div class="donation-card-four__content">
+                                <div class="donation-card-four__show">
+                                    <h3 class="donation-card-four__title"><a href="<?php echo get_home_url() ?>/participant-intake-form/" target="_blank">Participant Intake Form</a></h3>
+                                    <a href="<?php echo get_home_url() ?>/participant-intake-form/" class="donation-card-four__btn cleenhearts-btn-two" target="_blank">Click Here To view Form</a>
+                                </div>
+                                <div class="donation-card-four__hover">
+                                    <h3 class="donation-card-four__title"><a href="<?php echo get_home_url() ?>/participant-intake-form/" target="_blank">Participant Intake Form</a></h3>
+                                    <a href="<?php echo get_home_url() ?>/participant-intake-form/" class="donation-card-four__btn cleenhearts-btn-two" target="_blank">Click Here To view Form</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+					
+					
+					
+					
+					
+					
+					
+					
+					
+                    <div class="col-lg-4 col-md-6 wow fadeInUp animated" data-wow-duration="1500ms" data-wow-delay="00ms" style="visibility: visible; animation-duration: 1500ms; animation-delay: 0ms; animation-name: fadeInUp;">
+                        <div class="donation-card-four">
+                            <a href="<?php echo get_home_url() ?>/#become-volunteer-home" class="donation-card-four__image" target="_blank">
+                                <img src="<?php echo get_home_url() ?>/wp-content/uploads/2024/08/Form-Image-1-2.jpg" alt="">
+                            </a>
+                            <div class="donation-card-four__content">
+                                <div class="donation-card-four__show">
+                                    <h3 class="donation-card-four__title"><a href="<?php echo get_home_url() ?>/#become-volunteer-home" target="_blank">Become Volunteer Form</a></h3>
+                                    <a href="<?php echo get_home_url() ?>/#become-volunteer-home" class="donation-card-four__btn cleenhearts-btn-two" target="_blank">Click Here To view Form</a>
+                                </div>
+                                <div class="donation-card-four__hover">
+                                    <h3 class="donation-card-four__title"><a href="<?php echo get_home_url() ?>/#become-volunteer-home" target="_blank">Become Volunteer Form</a></h3>
+                                    <a href="<?php echo get_home_url() ?>/#become-volunteer-home" class="donation-card-four__btn cleenhearts-btn-two" target="_blank">Click Here To view Form</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+					
+					
+                    <div class="col-lg-4 col-md-6 wow fadeInUp animated d-none" data-wow-duration="1500ms" data-wow-delay="00ms" style="visibility: visible; animation-duration: 1500ms; animation-delay: 0ms; animation-name: fadeInUp;">
+                        <div class="donation-card-four">
+                            <a href="<?php echo get_home_url() ?>/referrals-faq/" class="donation-card-four__image" target="_blank">
+                                <img src="<?php echo get_home_url() ?>/wp-content/uploads/2024/07/faq-banner.jpg" alt="">
+                            </a>
+                            <div class="donation-card-four__content">
+                                <div class="donation-card-four__show">
+                                    <h3 class="donation-card-four__title"><a href="<?php echo get_home_url() ?>/referrals-faq/" target="_blank">Referrals Faq Form</a></h3>
+                                    <a href="<?php echo get_home_url() ?>/referrals-faq/" class="donation-card-four__btn cleenhearts-btn-two" target="_blank">Click Here To view Form</a>
+                                </div>
+                                <div class="donation-card-four__hover">
+                                    <h3 class="donation-card-four__title"><a href="<?php echo get_home_url() ?>/referrals-faq/" target="_blank">Referrals Faq Form</a></h3>
+                                    <a href="<?php echo get_home_url() ?>/referrals-faq/" class="donation-card-four__btn cleenhearts-btn-two" target="_blank">Click Here To view Form</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 wow fadeInUp animated" data-wow-duration="1500ms" data-wow-delay="00ms" style="visibility: visible; animation-duration: 1500ms; animation-delay: 0ms; animation-name: fadeInUp;">
+                        <div class="donation-card-four">
+                            <a href="<?php echo get_home_url() ?>/career/#career-page-form" target="_blank" class="donation-card-four__image">
+                                <img src="<?php echo get_home_url() ?>/wp-content/uploads/2024/05/why-choose-1-2.jpg" alt="Don't Hesitate To Contact Us Referrals Faq Form">
+                            </a>
+                            <div class="donation-card-four__content">
+                                <div class="donation-card-four__show">
+                                    <h3 class="donation-card-four__title"><a href="<?php echo get_home_url() ?>/career/#career-page-form" target="_blank">Career Page Form</a></h3>
+                                    <a href="<?php echo get_home_url() ?>/career/#career-page-form" target="_blank" class="donation-card-four__btn cleenhearts-btn-two">Click Here To view Form</a>
+                                </div>
+                                <div class="donation-card-four__hover">
+                                    <h3 class="donation-card-four__title"><a href="<?php echo get_home_url() ?>/career/#career-page-form" target="_blank">Career Page Form</a></h3>
+                                    <a href="<?php echo get_home_url() ?>/career/#career-page-form" target="_blank" class="donation-card-four__btn cleenhearts-btn-two">Click Here To view Form</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 wow fadeInUp animated" data-wow-duration="1500ms" data-wow-delay="00ms" style="visibility: visible; animation-duration: 1500ms; animation-delay: 0ms; animation-name: fadeInUp;">
+                        <div class="donation-card-four">
+                            <a href="<?php echo get_home_url() ?>/contact-us/#contact-page-form" target="_blank" class="donation-card-four__image">
+                                <img src="<?php echo get_home_url() ?>/wp-content/uploads/2024/07/contact-banner.jpg" alt="Don't Hesitate To Contact Us Referrals Faq Form">
+                            </a>
+                            <div class="donation-card-four__content">
+                                <div class="donation-card-four__show">
+                                    <h3 class="donation-card-four__title"><a href="<?php echo get_home_url() ?>/contact-us/#contact-page-form" target="_blank">Contact Us Form</a></h3>
+                                    <a href="<?php echo get_home_url() ?>/contact-us/#contact-page-form" target="_blank" class="donation-card-four__btn cleenhearts-btn-two">Click Here To view Form</a>
+                                </div>
+                                <div class="donation-card-four__hover">
+                                    <h3 class="donation-card-four__title"><a href="<?php echo get_home_url() ?>/contact-us/#contact-page-form" target="_blank">Contact Us Form</a></h3>
+                                    <a href="<?php echo get_home_url() ?>/contact-us/#contact-page-form" target="_blank" class="donation-card-four__btn cleenhearts-btn-two">Click Here To view Form</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 wow fadeInUp animated" data-wow-duration="1500ms" data-wow-delay="00ms" style="visibility: visible; animation-duration: 1500ms; animation-delay: 0ms; animation-name: fadeInUp;">
+                        <div class="donation-card-four">
+                            <a href="<?php echo get_home_url() ?>/private-confidential" target="_blank" class="donation-card-four__image">
+                                <img src="<?php echo get_home_url() ?>/wp-content/uploads/2024/07/accomodation-banner.jpg" alt="Don't Hesitate To Contact Us Referrals Faq Form">
+                            </a>
+                            <div class="donation-card-four__content">
+                                <div class="donation-card-four__show">
+                                    <h3 class="donation-card-four__title"><a href="<?php echo get_home_url() ?>/private-confidential" target="_blank">Employee Onboarding</a></h3>
+                                    <a href="<?php echo get_home_url() ?>/private-confidential" target="_blank" class="donation-card-four__btn cleenhearts-btn-two">Click Here To view Form</a>
+                                </div>
+                                <div class="donation-card-four__hover">
+                                    <h3 class="donation-card-four__title"><a href="<?php echo get_home_url() ?>/private-confidential" target="_blank">Employee Onboarding</a></h3>
+                                    <a href="<?php echo get_home_url() ?>/private-confidential" target="_blank" class="donation-card-four__btn cleenhearts-btn-two">Click Here To view Form</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+					<template>
+					<div class="col-lg-4 col-md-6 wow fadeInUp animated" data-wow-duration="1500ms" data-wow-delay="00ms" style="visibility: visible; animation-duration: 1500ms; animation-delay: 0ms; animation-name: fadeInUp;">
+						<div class="donation-card-four">
+							<a href="<?php echo get_home_url() ?>/application-for-rental/" target="_blank" class="donation-card-four__image">
+								<img src="<?php echo get_home_url() ?>/wp-content/uploads/2024/05/20211113_125440-scaled.jpg" alt="DApplication for rental Form">
+							</a>
+							<div class="donation-card-four__content">
+								<div class="donation-card-four__show">
+									<h3 class="donation-card-four__title"><a href="<?php echo get_home_url() ?>/application-for-rental/" target="_blank">Application for rental Form</a></h3>
+									<a href="<?php echo get_home_url() ?>/application-for-rental/" target="_blank" class="donation-card-four__btn cleenhearts-btn-two">Click Here To view Form</a>
+								</div>
+								<div class="donation-card-four__hover">
+									<h3 class="donation-card-four__title"><a href="<?php echo get_home_url() ?>/application-for-rental/" target="_blank">Application for rental Form</a></h3>
+									<a href="<?php echo get_home_url() ?>/application-for-rental/" target="_blank" class="donation-card-four__btn cleenhearts-btn-two">Click Here To view Form</a>
+								</div>
+							</div>
+						</div>
+					</div>
+					</template>
+                    <div class="col-lg-4 col-md-6 wow fadeInUp animated d-none" data-wow-duration="1500ms" data-wow-delay="00ms" style="visibility: visible; animation-duration: 1500ms; animation-delay: 0ms; animation-name: fadeInUp;">
+                        <div class="donation-card-four">
+                            <a href="<?php echo get_home_url() ?>/wp-content/uploads/2024/09/FM-Consent-for-your-NDIS-information.docx" download class="donation-card-four__image">
+                                <img src="<?php echo get_home_url() ?>/wp-content/uploads/2024/08/letters-of-support-banner.jpg" alt="Don't Hesitate To Contact Us Referrals Faq Form">
+                            </a>
+                            <div class="donation-card-four__content">
+                                <div class="donation-card-four__show">
+                                    <h3 class="donation-card-four__title"><a href="<?php echo get_home_url() ?>/wp-content/uploads/2024/09/FM-Consent-for-your-NDIS-information.docx" download >Consent for NDIS information</a></h3>
+                                    <a href="<?php echo get_home_url() ?>/wp-content/uploads/2024/09/FM-Consent-for-your-NDIS-information.docx" download class="donation-card-four__btn cleenhearts-btn-two">Click To Download</a>
+                                </div>
+                                <div class="donation-card-four__hover">
+                                    <h3 class="donation-card-four__title"><a href="<?php echo get_home_url() ?>/wp-content/uploads/2024/09/FM-Consent-for-your-NDIS-information.docx" download >Consent for NDIS information</a></h3>
+                                    <a href="<?php echo get_home_url() ?>/wp-content/uploads/2024/09/FM-Consent-for-your-NDIS-information.docx" download class="donation-card-four__btn cleenhearts-btn-two">Click To Download</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- /.row -->
+            </div><!-- /.container -->
+        </section>
+
+
+
+	 
+<?php get_footer(); ?>

@@ -1,0 +1,46 @@
+<?php
+/*
+*Template Name: Housing & Home Supports
+*/
+?>
+<?php get_header(); ?>
+
+<?php include 'inner-banners.php' ?>
+
+<section class="housing-content section-space">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-9 wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="00ms">
+
+                <div class="housing-content__inner">
+                    <?php
+                    while ( have_posts() ) : the_post();
+                        the_content();
+                    endwhile;
+                    ?>
+                </div><!-- /.housing-content__inner -->
+
+                <div class="housing-content__cta">
+                    <a href="<?php echo esc_url( home_url( '/referral-form/' ) ); ?>" class="contact-information__btn cleenhearts-btn">
+                        <div class="cleenhearts-btn__icon-box">
+                            <div class="cleenhearts-btn__icon-box__inner"><span class="icon-duble-arrow"></span></div>
+                        </div>
+                        <span class="cleenhearts-btn__text">Make a Referral</span>
+                    </a>
+                    <a href="<?php echo esc_url( home_url( '/contact-us/' ) ); ?>" class="contact-information__btn cleenhearts-btn cleenhearts-btn--border">
+                        <div class="cleenhearts-btn__icon-box">
+                            <div class="cleenhearts-btn__icon-box__inner"><span class="icon-duble-arrow"></span></div>
+                        </div>
+                        <span class="cleenhearts-btn__text">Contact Us</span>
+                    </a>
+                    <style>
+                        .contact-information__btn::after{ display:none; }
+                    </style>
+                </div><!-- /.housing-content__cta -->
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<?php get_footer(); ?>

@@ -1,0 +1,525 @@
+<?php
+/**
+ * Plugin Name: Pivotal Connect Mega Menu
+ * Plugin URI:  https://creativus-design.com/
+ * Description: A beautifully designed mega navigation menu for Pivotal Connect featuring all service categories, housing supports, cultural advocacy, and more.
+ * Version:     1.0.0
+ * Author:      Creativus Design
+ * Author URI:  https://creativus-design.com/
+ * Text Domain: pivotal-mega-menu
+ * License:     GPL-2.0+
+ */
+
+defined( 'ABSPATH' ) || exit;
+
+define( 'PMM_VERSION',  '1.0.0' );
+define( 'PMM_URL',      plugin_dir_url( __FILE__ ) );
+define( 'PMM_PATH',     plugin_dir_path( __FILE__ ) );
+
+final class Pivotal_Mega_Menu {
+
+	private static $instance = null;
+
+	public static function get_instance() {
+		if ( null === self::$instance ) {
+			self::$instance = new self();
+		}
+		return self::$instance;
+	}
+
+	private function __construct() {
+		// Front-end
+		add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_assets' ] );
+		add_action( 'pmm_render_inline',  [ $this, 'render_menu' ] );
+
+		// Admin
+		add_action( 'admin_menu',             [ $this, 'register_admin_menu' ] );
+		add_action( 'admin_enqueue_scripts',  [ $this, 'enqueue_admin_assets' ] );
+		add_action( 'admin_post_pmm_save',    [ $this, 'handle_save' ] );
+		add_action( 'admin_post_pmm_reset',   [ $this, 'handle_reset' ] );
+	}
+
+	/* ==========================================================
+	   FRONT-END
+	   ========================================================== */
+
+	public function enqueue_assets() {
+		wp_enqueue_style(  'pmm-style',  PMM_URL . 'css/mega-menu.css', [], PMM_VERSION );
+		wp_enqueue_script( 'pmm-script', PMM_URL . 'js/mega-menu.js', [ 'jquery' ], PMM_VERSION, true );
+	}
+
+	/** Returns the live menu data (DB first, defaults as fallback). */
+	private function get_menu_data() {
+		$saved = get_option( 'pmm_menu_data' );
+		if ( ! empty( $saved ) && is_array( $saved ) ) {
+			return $saved;
+		}
+		return $this->get_default_menu_data();
+	}
+
+	/** Hard-coded defaults — always the authoritative structure. */
+	private function get_default_menu_data() {
+		$b = trailingslashit( home_url( '/' ) );
+
+		return [
+			[
+				'label'    => 'HOME',
+				'url'      => $b,
+				'icon'     => 'fa-solid fa-house',
+				'section'  => '',
+				'wide'     => false,
+				'cols'     => 1,
+				'children' => [],
+			],
+			[
+				'label'   => 'NDIS SUPPORTS',
+				'url'     => $b . 'our-services/',
+				'icon'    => 'fa-solid fa-hands-holding-heart',
+				'section' => 'NDIS Support Services',
+				'wide'    => false,
+				'cols'    => 1,
+				'children' => [
+					[ 'label' => 'Community Participation & Social Connection', 'url' => '#', 'icon' => 'fa-solid fa-people-group' ],
+					[ 'label' => 'Support Coordination',                        'url' => '#', 'icon' => 'fa-solid fa-clipboard-list' ],
+					[ 'label' => 'Home & Living Supports',                      'url' => $b . 'housing-home-supports/', 'icon' => 'fa-solid fa-house-chimney' ],
+				],
+			],
+			[
+				'label'   => 'FORMS & RESOURCES',
+				'url'     => $b . 'forms/',
+				'icon'    => 'fa-solid fa-file-lines',
+				'section' => 'Forms & Resources',
+				'wide'    => false,
+				'cols'    => 1,
+				'children' => [
+					[ 'label' => 'NDIS Forms',    'url' => $b . 'forms/', 'icon' => 'fa-solid fa-file-medical' ],
+					[ 'label' => 'Housing Forms', 'url' => $b . 'rooming-accommodation-agreement/', 'icon' => 'fa-solid fa-house' ],
+				],
+			],
+			[
+				'label'    => 'ABOUT US',
+				'url'      => $b . 'about-us/',
+				'icon'     => 'fa-solid fa-circle-info',
+				'section'  => '',
+				'wide'     => false,
+				'cols'     => 1,
+				'children' => [],
+			],
+			[
+				'label'    => 'REFERRAL',
+				'url'      => $b . 'referral-form/',
+				'icon'     => 'fa-solid fa-paper-plane',
+				'section'  => '',
+				'wide'     => false,
+				'cols'     => 1,
+				'children' => [],
+			],
+			[
+				'label'    => 'CONTACT US',
+				'url'      => $b . 'contact-us/',
+				'icon'     => 'fa-solid fa-envelope',
+				'section'  => '',
+				'wide'     => false,
+				'cols'     => 1,
+				'children' => [],
+			],
+			[
+				'label'    => 'CAREERS',
+				'url'      => $b . 'career/',
+				'icon'     => 'fa-solid fa-briefcase',
+				'section'  => '',
+				'wide'     => false,
+				'cols'     => 1,
+				'children' => [],
+			],
+		];
+	}
+
+	public function render_menu() {
+		$menus      = $this->get_menu_data();
+		$total      = count( $menus );
+		$right_from = $total - 3;
+		?>
+<nav id="pivotal-mega-menu" aria-label="Pivotal Connect Mega Menu" role="navigation">
+	<div class="pmm-inner">
+		<button class="pmm-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="pmm-list">
+			<span class="pmm-toggle__bars"><span></span><span></span><span></span></span>
+			<span class="pmm-toggle__label">Menu</span>
+		</button>
+		<ul class="pmm-list" id="pmm-list" role="list">
+			<?php foreach ( $menus as $i => $item ) :
+				$has_kids = ! empty( $item['children'] );
+				$is_wide  = ! empty( $item['wide'] );
+				$cols     = intval( $item['cols'] ?? 1 );
+				$cls      = 'pmm-item';
+				if ( $has_kids ) $cls .= ' pmm-has-children';
+				if ( $i >= $right_from ) $cls .= ' pmm-align-right';
+				elseif ( $is_wide && $i > 0 ) $cls .= ' pmm-align-center';
+			?>
+			<li class="<?php echo esc_attr( $cls ); ?>" role="listitem">
+				<a href="<?php echo esc_url( $item['url'] ); ?>" class="pmm-top-link"
+				   <?php if ( $has_kids ) echo 'aria-haspopup="true" aria-expanded="false"'; ?>>
+					<i class="<?php echo esc_attr( $item['icon'] ); ?> pmm-tl-icon" aria-hidden="true"></i>
+					<span class="pmm-tl-text"><?php echo esc_html( $item['label'] ); ?></span>
+					<?php if ( $has_kids ) : ?>
+					<i class="fa-solid fa-chevron-down pmm-chevron" aria-hidden="true"></i>
+					<?php endif; ?>
+				</a>
+				<?php if ( $has_kids ) : ?>
+				<div class="pmm-dropdown<?php echo $is_wide ? ' pmm-dropdown--wide' : ''; ?>"
+				     role="region" aria-label="<?php echo esc_attr( $item['section'] ); ?>">
+					<div class="pmm-drop-header">
+						<i class="<?php echo esc_attr( $item['icon'] ); ?>" aria-hidden="true"></i>
+						<span><?php echo esc_html( $item['section'] ); ?></span>
+					</div>
+					<ul class="pmm-drop-list pmm-cols-<?php echo $cols; ?>" role="list">
+						<?php foreach ( $item['children'] as $child ) : ?>
+						<li role="listitem">
+							<a href="<?php echo esc_url( $child['url'] ); ?>">
+								<span class="pmm-ci">
+									<i class="<?php echo esc_attr( $child['icon'] ); ?>" aria-hidden="true"></i>
+								</span>
+								<span><?php echo esc_html( $child['label'] ); ?></span>
+							</a>
+						</li>
+						<?php endforeach; ?>
+					</ul>
+					<?php if ( $item['url'] !== '#' ) : ?>
+					<div class="pmm-drop-footer">
+						<a href="<?php echo esc_url( $item['url'] ); ?>" class="pmm-view-all">
+							View All <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+						</a>
+					</div>
+					<?php endif; ?>
+				</div>
+				<?php endif; ?>
+			</li>
+			<?php endforeach; ?>
+		</ul>
+	</div>
+</nav>
+		<?php
+	}
+
+	/* ==========================================================
+	   ADMIN
+	   ========================================================== */
+
+	public function register_admin_menu() {
+		add_menu_page(
+			'Mega Menu Settings',
+			'Mega Menu',
+			'manage_options',
+			'pivotal-mega-menu',
+			[ $this, 'render_admin_page' ],
+			'dashicons-menu-alt',
+			81
+		);
+	}
+
+	public function enqueue_admin_assets( $hook ) {
+		if ( 'toplevel_page_pivotal-mega-menu' !== $hook ) return;
+
+		// Font Awesome for icon previews in admin
+		wp_enqueue_style(
+			'pmm-fa-admin',
+			get_template_directory_uri() . '/assets/vendors/fontawesome/css/all.min.css',
+			[],
+			PMM_VERSION
+		);
+		wp_enqueue_style(  'pmm-admin-style',  PMM_URL . 'css/admin.css',  [], PMM_VERSION );
+		wp_enqueue_script( 'pmm-admin-script', PMM_URL . 'js/admin.js', [ 'jquery' ], PMM_VERSION, true );
+	}
+
+	public function handle_save() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'Unauthorized', 'pivotal-mega-menu' ) );
+		}
+		check_admin_referer( 'pmm_save_menu', 'pmm_nonce' );
+
+		$defaults = $this->get_default_menu_data();
+		$raw      = isset( $_POST['pmm_menu'] ) ? (array) $_POST['pmm_menu'] : [];
+		$clean    = [];
+
+		foreach ( array_values( $raw ) as $i => $item ) {
+			$def     = $defaults[ $i ] ?? [];
+			$entry   = [
+				'label'    => sanitize_text_field( $item['label']   ?? '' ),
+				'url'      => $this->sanitize_menu_url( $item['url'] ?? '#' ),
+				'icon'     => sanitize_text_field( $item['icon']    ?? ( $def['icon'] ?? '' ) ),
+				'section'  => sanitize_text_field( $item['section'] ?? ( $def['section'] ?? '' ) ),
+				'wide'     => isset( $item['wide'] ) && $item['wide'] !== '0',
+				'cols'     => intval( $item['cols'] ?? 1 ),
+				'children' => [],
+			];
+
+			$raw_kids = isset( $item['children'] ) ? (array) $item['children'] : [];
+			foreach ( array_values( $raw_kids ) as $j => $child ) {
+				$def_child = $def['children'][ $j ] ?? [];
+				if ( trim( $child['label'] ?? '' ) === '' ) continue; // skip blank rows
+				$entry['children'][] = [
+					'label' => sanitize_text_field( $child['label'] ),
+					'url'   => $this->sanitize_menu_url( $child['url'] ?? '#' ),
+					'icon'  => sanitize_text_field( $child['icon']  ?? ( $def_child['icon'] ?? 'fa-solid fa-circle-dot' ) ),
+				];
+			}
+
+			$clean[] = $entry;
+		}
+
+		update_option( 'pmm_menu_data', $clean );
+
+		wp_safe_redirect( add_query_arg( [ 'page' => 'pivotal-mega-menu', 'saved' => '1' ], admin_url( 'admin.php' ) ) );
+		exit;
+	}
+
+	public function handle_reset() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'Unauthorized', 'pivotal-mega-menu' ) );
+		}
+		check_admin_referer( 'pmm_reset_menu', 'pmm_nonce' );
+
+		delete_option( 'pmm_menu_data' );
+
+		wp_safe_redirect( add_query_arg( [ 'page' => 'pivotal-mega-menu', 'reset' => '1' ], admin_url( 'admin.php' ) ) );
+		exit;
+	}
+
+	private function sanitize_menu_url( $url ) {
+		$url = trim( $url );
+		if ( '' === $url || '#' === $url ) return '#';
+		return esc_url_raw( $url );
+	}
+
+	public function render_admin_page() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'Unauthorized', 'pivotal-mega-menu' ) );
+		}
+
+		$menu  = $this->get_menu_data();
+		$saved = ( isset( $_GET['saved'] ) && '1' === $_GET['saved'] );
+		$reset = ( isset( $_GET['reset'] ) && '1' === $_GET['reset'] );
+		?>
+		<div class="wrap pmm-admin-wrap">
+
+			<!-- Header banner -->
+			<div class="pmm-admin-banner">
+				<div class="pmm-admin-banner__left">
+					<span class="pmm-admin-banner__icon"><i class="fas fa-bars"></i></span>
+					<div>
+						<h1 class="pmm-admin-banner__title">Pivotal Connect Mega Menu</h1>
+						<p class="pmm-admin-banner__sub">Edit labels, URLs, section titles and sub-items for each navigation section.</p>
+					</div>
+				</div>
+				<div class="pmm-admin-banner__right">
+					<span class="pmm-admin-banner__credit">by <a href="https://creativus-design.com/" target="_blank">Creativus Design</a></span>
+					<a href="<?php echo esc_url( home_url( '/' ) ); ?>" target="_blank" class="button">
+						<i class="fas fa-eye"></i> View Site
+					</a>
+				</div>
+			</div>
+
+			<?php if ( $saved ) : ?>
+			<div class="notice notice-success is-dismissible pmm-notice">
+				<p><strong>&#10003; Changes saved!</strong> Your mega menu has been updated and is live on the website.</p>
+			</div>
+			<?php elseif ( $reset ) : ?>
+			<div class="notice notice-info is-dismissible pmm-notice">
+				<p><strong>&#8635; Menu reset to defaults.</strong> All custom changes have been cleared.</p>
+			</div>
+			<?php endif; ?>
+
+			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" id="pmm-admin-form" novalidate>
+				<input type="hidden" name="action" value="pmm_save" />
+				<?php wp_nonce_field( 'pmm_save_menu', 'pmm_nonce' ); ?>
+
+				<!-- Top toolbar -->
+				<div class="pmm-toolbar">
+					<button type="submit" class="button button-primary pmm-btn-save">
+						<i class="fas fa-save"></i> Save All Changes
+					</button>
+					<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="display:inline" id="pmm-reset-form">
+						<input type="hidden" name="action" value="pmm_reset" />
+						<?php wp_nonce_field( 'pmm_reset_menu', 'pmm_nonce' ); ?>
+						<button type="button" class="button pmm-btn-reset" id="pmm-trigger-reset">
+							<i class="fas fa-undo"></i> Reset to Defaults
+						</button>
+					</form>
+					<span class="pmm-toolbar__tip">
+						<i class="fas fa-info-circle"></i>
+						Click a section to expand it. Use <code>#</code> as the URL for pages not yet built.
+					</span>
+				</div>
+
+				<!-- Sections -->
+				<div class="pmm-sections" id="pmm-sections">
+					<?php foreach ( $menu as $i => $item ) :
+						$children   = $item['children'] ?? [];
+						$total_kids = count( $children );
+						$live_kids  = count( array_filter( $children, fn( $c ) => $c['url'] !== '#' ) );
+						$pend_kids  = $total_kids - $live_kids;
+					?>
+					<div class="pmm-section" data-index="<?php echo esc_attr( $i ); ?>">
+
+						<!-- Clickable section head -->
+						<div class="pmm-section__head js-toggle-section">
+							<div class="pmm-section__head-l">
+								<span class="pmm-sh-icon"><i class="<?php echo esc_attr( $item['icon'] ); ?>"></i></span>
+								<span class="pmm-sh-num"><?php echo $i + 1; ?></span>
+								<strong class="pmm-sh-label js-section-label"><?php echo esc_html( $item['label'] ); ?></strong>
+							</div>
+							<div class="pmm-section__head-r">
+								<?php if ( $live_kids > 0 ) : ?>
+								<span class="pmm-pill pmm-pill--live"><?php echo $live_kids; ?> live</span>
+								<?php endif; ?>
+								<?php if ( $pend_kids > 0 ) : ?>
+								<span class="pmm-pill pmm-pill--pending"><?php echo $pend_kids; ?> pending</span>
+								<?php endif; ?>
+								<span class="pmm-pill pmm-pill--count js-child-pill"><?php echo $total_kids; ?> sub-items</span>
+								<span class="pmm-sh-chevron">&#9660;</span>
+							</div>
+						</div>
+
+						<!-- Section body (hidden by default) -->
+						<div class="pmm-section__body" style="display:none">
+
+							<!-- Top-level settings -->
+							<div class="pmm-settings-box">
+								<h3 class="pmm-box-title">Section Settings</h3>
+								<table class="form-table pmm-ftable">
+									<tr>
+										<th><label>Menu Label</label></th>
+										<td>
+											<input type="text"
+											       name="pmm_menu[<?php echo $i; ?>][label]"
+											       value="<?php echo esc_attr( $item['label'] ); ?>"
+											       class="regular-text js-label-input" />
+											<p class="description">Text displayed in the navigation bar.</p>
+										</td>
+									</tr>
+									<tr>
+										<th><label>Main URL</label></th>
+										<td>
+											<div class="pmm-url-wrap">
+												<input type="text"
+												       name="pmm_menu[<?php echo $i; ?>][url]"
+												       value="<?php echo esc_attr( $item['url'] ); ?>"
+												       class="regular-text js-url-input"
+												       placeholder="#" />
+												<span class="pmm-status <?php echo ( '#' === $item['url'] ) ? 'pmm-status--pending' : 'pmm-status--live'; ?>">
+													<?php echo ( '#' === $item['url'] ) ? '&#9888; Pending' : '&#10003; Live'; ?>
+												</span>
+											</div>
+											<p class="description">Used for the "View All" link in the dropdown. Set to <code>#</code> if the page doesn't exist yet.</p>
+										</td>
+									</tr>
+									<tr>
+										<th><label>Dropdown Header Title</label></th>
+										<td>
+											<input type="text"
+											       name="pmm_menu[<?php echo $i; ?>][section]"
+											       value="<?php echo esc_attr( $item['section'] ); ?>"
+											       class="regular-text" />
+											<p class="description">Title shown at the top of the dropdown panel.</p>
+										</td>
+									</tr>
+								</table>
+								<!-- Preserve structural / non-editable fields -->
+								<input type="hidden" name="pmm_menu[<?php echo $i; ?>][icon]" value="<?php echo esc_attr( $item['icon'] ); ?>" />
+								<input type="hidden" name="pmm_menu[<?php echo $i; ?>][wide]" value="<?php echo empty( $item['wide'] ) ? '0' : '1'; ?>" />
+								<input type="hidden" name="pmm_menu[<?php echo $i; ?>][cols]" value="<?php echo intval( $item['cols'] ?? 1 ); ?>" />
+							</div>
+
+							<!-- Sub-items -->
+							<div class="pmm-children-box">
+								<h3 class="pmm-box-title">
+									Sub-items
+									<span class="pmm-count-badge js-child-count"><?php echo $total_kids; ?></span>
+								</h3>
+
+								<table class="pmm-child-table">
+									<thead>
+										<tr>
+											<th class="col-icon">Icon</th>
+											<th class="col-label">Label</th>
+											<th class="col-url">URL <span class="pmm-hint">(use # if page not built yet)</span></th>
+											<th class="col-status">Status</th>
+											<th class="col-rm"></th>
+										</tr>
+									</thead>
+									<tbody class="js-child-tbody" id="pmm-tbody-<?php echo $i; ?>">
+										<?php foreach ( $children as $j => $child ) : ?>
+										<tr class="pmm-child-row" data-section="<?php echo $i; ?>">
+											<td class="col-icon">
+												<i class="<?php echo esc_attr( $child['icon'] ); ?> pmm-icon-prev"></i>
+												<input type="hidden"
+												       name="pmm_menu[<?php echo $i; ?>][children][<?php echo $j; ?>][icon]"
+												       value="<?php echo esc_attr( $child['icon'] ); ?>" />
+											</td>
+											<td class="col-label">
+												<input type="text"
+												       name="pmm_menu[<?php echo $i; ?>][children][<?php echo $j; ?>][label]"
+												       value="<?php echo esc_attr( $child['label'] ); ?>"
+												       class="widefat" />
+											</td>
+											<td class="col-url">
+												<input type="text"
+												       name="pmm_menu[<?php echo $i; ?>][children][<?php echo $j; ?>][url]"
+												       value="<?php echo esc_attr( $child['url'] ); ?>"
+												       class="widefat js-url-input"
+												       placeholder="#" />
+											</td>
+											<td class="col-status">
+												<span class="pmm-status <?php echo ( '#' === $child['url'] ) ? 'pmm-status--pending' : 'pmm-status--live'; ?>">
+													<?php echo ( '#' === $child['url'] ) ? 'Pending' : 'Live'; ?>
+												</span>
+											</td>
+											<td class="col-rm">
+												<button type="button" class="button-link js-remove-child" title="Remove sub-item">
+													<span class="dashicons dashicons-trash"></span>
+												</button>
+											</td>
+										</tr>
+										<?php endforeach; ?>
+									</tbody>
+								</table>
+
+								<button type="button" class="button pmm-btn-add js-add-child" data-section="<?php echo $i; ?>">
+									<span class="dashicons dashicons-plus-alt2"></span> Add Sub-item
+								</button>
+							</div><!-- /.pmm-children-box -->
+
+						</div><!-- /.pmm-section__body -->
+					</div><!-- /.pmm-section -->
+					<?php endforeach; ?>
+				</div><!-- /.pmm-sections -->
+
+				<!-- Bottom toolbar -->
+				<div class="pmm-toolbar pmm-toolbar--bottom">
+					<button type="submit" class="button button-primary pmm-btn-save">
+						<i class="fas fa-save"></i> Save All Changes
+					</button>
+				</div>
+
+			</form><!-- #pmm-admin-form -->
+
+			<p class="pmm-admin-footer-note">
+				Pivotal Connect Mega Menu v<?php echo esc_html( PMM_VERSION ); ?> &mdash;
+				by <a href="https://creativus-design.com/" target="_blank">Creativus Design</a>
+			</p>
+
+		</div><!-- .pmm-admin-wrap -->
+
+		<script>
+		/* Inline: Reset form submit confirmation */
+		document.getElementById('pmm-trigger-reset').addEventListener('click', function() {
+			if (confirm('This will reset ALL menu data to the original defaults.\n\nAre you sure?')) {
+				document.getElementById('pmm-reset-form').submit();
+			}
+		});
+		</script>
+		<?php
+	}
+}
+
+Pivotal_Mega_Menu::get_instance();
